@@ -1,0 +1,134 @@
+---
+title: "Shah Nawaz <br> Curriculum vitae"
+output:
+  pagedown::html_paged:
+    css: ["css/bootstrap-5.2.1.min.css", "css/two-col-cv.css"]
+    number_sections: false
+knit: pagedown::chrome_print
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(knitr)
+library(glue)
+library(fontawesome)
+library(readxl)
+library(lubridate)
+source("R/utility-functions.R")
+
+cv_entries <- read_excel("cv_data.xlsx", sheet = "cv_entries") |> 
+  mutate(year = year(date))
+publications <- read_excel("cv_data.xlsx", sheet = "publications") |> 
+  mutate(year = year(date))
+```
+
+
+::: {.row}
+
+:::::: {.col-8 .summary}
+
+# Professional summary
+**Aims**---to develop efficient techniques for analysis of data that help organizations for future decison making.\
+**Methods**---ggplot, matplotlib, powerBI, web scraping, machine learning, report writing.
+::::::
+
+:::::: {.col-4}
+
+# Contact {.box}
+
+::::::::: {.info-box}
+
+| Center | Left |
+|:------:|:-----|
+| `r fa("map-marker-alt")`| 3SR research labotory, University of Grenoble Alpes |
+| `r fa("envelope")` | shah.nawaz@univ-grenoble-alpes.fr |
+| `r fa("globe")` | [LinkedIn](https://linkedin.com/in/shah-nawaz) |
+| `r fa("github")` | [Github](https://github.com/shahnawaz323) |
+ 
+:::::::::
+
+::::::
+
+:::
+
+::: {.row}
+
+
+
+:::::: {.col-6 .right}
+
+# Education
+
+```{r}
+cv_entries |> 
+  filter(type == 'education') |> 
+  mutate(what = glue("<span class='cv-entry-title'>{what}</span>, {where}")) |> 
+  select(year, what) |> 
+  kable()
+```
+
+# Selected teaching experience
+```{r}
+cv_entries |> 
+  filter(type == 'teaching', short_cv == "y") |> 
+  mutate(what = glue("<span class='cv-entry-title'>{what}</span>, {where}<br>",
+         "{additional_info}")) |> 
+  select(year, what) |> 
+  kable()
+```
+
+# Technical skills
+```{r}
+cv_entries |> 
+  filter(type == 'technical') |> 
+  mutate(what = glue("<span class='cv-entry-title'>{what}")) |> 
+  select(what, additional_info) |> 
+  kable()
+```
+::::::
+
+:::::: {.col-6 .left}
+
+# Data analysis and visualization
+```{r}
+cv_entries |> 
+  filter(type == 'work', exclude == "n") |> 
+  mutate(what = glue("<span class='cv-entry-title'>{what}</span>, {additional_info}<br>")) |> 
+  select(what) |> 
+  kable()
+
+
+```
+
+# Volunteering
+```{r}
+cv_entries |>
+  filter(type == 'volunteering') |>
+  filter(exclude == "n") |>
+  mutate(what = glue("<span class='cv-entry-title'>{what}")) |>
+
+  arrange(desc(date), desc(date_end)) |> 
+  select(what, additional_info) |>
+  kable()
+```
+
+# Languages
+```{r}
+cv_entries |> 
+  filter(type == 'languages') |> 
+  mutate(what = glue("<span class='cv-entry-title'>{what}")) |> 
+  select(institution, what, additional_info) |> 
+  kable()
+```
+
+keywords
+```{r}
+cv_entries |> 
+  filter(type == 'keywords') |> 
+  mutate(what = glue("<span class='cv-entry-title'>{what}</span>")) |> 
+  select(what) |> 
+  kable()
+```
+::::::
+:::

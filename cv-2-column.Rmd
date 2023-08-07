@@ -1,5 +1,5 @@
 ---
-title: "Ulrik Lyngs <br> Curriculum vitae"
+title: "Shah Nawaz <br> Curriculum vitae"
 output:
   pagedown::html_paged:
     css: ["css/bootstrap-5.2.1.min.css", "css/two-col-cv.css"]
